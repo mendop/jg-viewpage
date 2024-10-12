@@ -2,17 +2,23 @@ package com.zl.jinggnagview;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -57,6 +63,8 @@ public class JingGangView<B, H extends RecyclerView.ViewHolder> extends FrameLay
         viewPager.setLayoutParams(lp);
         viewPager.setBackgroundColor(0xffffffff);
         addView(viewPager);
+
+
     }
 
     public JingGangView<B, H> setActivity(AppCompatActivity activity) {
@@ -141,7 +149,7 @@ public class JingGangView<B, H extends RecyclerView.ViewHolder> extends FrameLay
             }
         }
         if (isyy || list.size() == 1) return;
-
+        addIndicator(list.size());
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -158,10 +166,13 @@ public class JingGangView<B, H extends RecyclerView.ViewHolder> extends FrameLay
                 } else {
                     h = getTargetHeigth(position, false);
                     p = 1 - positionOffset;
-                    pos = position+1;
+                    pos = position + 1;
                 }
                 p = (float) doubleNumber(p);
-                updatePagerHeightForChild(p,pos, h, viewPager);
+                updatePagerHeightForChild(p, pos, h, viewPager);
+//                if (indicatorView != null) {
+//                    moveIndicator(position, p, position >= index);
+//                }
             }
 
             @Override
@@ -177,6 +188,78 @@ public class JingGangView<B, H extends RecyclerView.ViewHolder> extends FrameLay
                 }
             }
         });
+    }
+
+    private void moveIndicator(int position, float positionOffset, boolean isLeft) {
+
+//        FrameLayout.LayoutParams lp = (LayoutParams) indicatorView.getLayoutParams();
+//        if (lp != null) {
+//            int x = dpToPx(10);
+//            int w = x * position + x;//* list.size()-dpToPx(10);
+//            w = (int) (isLeft ? (w + x * positionOffset) : (w - x * positionOffset));
+//            lp.leftMargin =w;
+//            indicatorView.setLayoutParams(lp);
+//            indicatorView.requestLayout();
+//        }
+    }
+
+//    private View indicatorView;
+
+    private void addIndicator(int size) {
+        FrameLayout layout = new FrameLayout(activity);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(dpToPx(10 * size), dpToPx(4));
+        lp.gravity = Gravity.CENTER | Gravity.BOTTOM;
+        lp.bottomMargin = dpToPx(5);
+        layout.setLayoutParams(lp);
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        gradientDrawable.setColor(0xff999999);
+        gradientDrawable.setCornerRadius(dpToPx(2));
+        layout.setBackground(gradientDrawable);
+        addView(layout);
+
+//        indicatorView = new View(activity);
+//        FrameLayout.LayoutParams lp2 = new FrameLayout.LayoutParams(dpToPx(10), dpToPx(4));
+//        lp2.gravity = Gravity.START;
+//        indicatorView.setLayoutParams(lp2);
+
+        GradientDrawable gradientDrawable2 = new GradientDrawable();
+        gradientDrawable2.setColor(0xffde2e2d);
+        gradientDrawable2.setCornerRadius(dpToPx(2));
+        gradientDrawable2.setSize(dpToPx(10),dpToPx(4));
+//        indicatorView.setBackground(gradientDrawable2);
+//        layout.addView(indicatorView);
+
+        TabLayout tabLayout = new TabLayout(activity);
+        FrameLayout.LayoutParams lp3 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        tabLayout.setLayoutParams(lp3);
+        tabLayout.setBackground(gradientDrawable);
+        tabLayout.setSelectedTabIndicatorColor(0xffde2e2d);
+//        tabLayout.setSelectedTabIndicatorHeight(dpToPx(4));
+        tabLayout.setSelectedTabIndicator(gradientDrawable2);
+        layout.addView(tabLayout);
+
+        new TabLayoutMediator(tabLayout, viewPager, false, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+                // 可以在这里自定义Tab的样式
+                if (tab.isSelected()){
+                    View indicatorView = new View(activity);
+                    LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(dpToPx(10), ViewGroup.LayoutParams.MATCH_PARENT);
+                    indicatorView.setLayoutParams(lp2);
+
+                    GradientDrawable gradientDrawable2 = new GradientDrawable();
+                    gradientDrawable2.setColor(0xffde2e2d);
+                    gradientDrawable2.setCornerRadius(dpToPx(2));
+                    indicatorView.setBackground(gradientDrawable2);
+                    tab.setCustomView(indicatorView);
+                }else {
+                    tab.setCustomView(null);
+                }
+
+
+            }
+
+        }).attach();
     }
 
 
@@ -208,14 +291,14 @@ public class JingGangView<B, H extends RecyclerView.ViewHolder> extends FrameLay
         }
     }
 
-    private void updatePagerHeightForChild(float percent, int position,int toHeight,  ViewPager2 pager) {
+    private void updatePagerHeightForChild(float percent, int position, int toHeight, ViewPager2 pager) {
         if (toHeight < 0 || percent < 0) return;
         pager.post(new Runnable() {
             @Override
             public void run() {
                 ViewGroup.LayoutParams lp = pager.getLayoutParams();
                 int height = heights.get(position);
-                if (height!=toHeight){
+                if (height != toHeight) {
                     if (height > toHeight) {
                         lp.height = (int) (height - (height - toHeight) * percent) + paddingTop + paddingBottom;
                     } else {

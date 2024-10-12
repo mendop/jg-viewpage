@@ -10,12 +10,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.zl.testproject.R;
 import com.zl.jinggnagview.IIconAdapterListener;
-import com.zl.testproject.icon_page.IconBean;
 import com.zl.jinggnagview.IconFragment;
-import com.zl.testproject.icon_page.IconHolder;
 import com.zl.jinggnagview.JingGangView;
+import com.zl.testproject.R;
+import com.zl.testproject.icon_page.IconBean;
+import com.zl.testproject.icon_page.IconHolder;
 
 import java.util.ArrayList;
 import java.util.List;
