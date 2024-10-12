@@ -255,8 +255,6 @@ public class JingGangView<B, H extends RecyclerView.ViewHolder> extends FrameLay
                 }else {
                     tab.setCustomView(null);
                 }
-
-
             }
 
         }).attach();
