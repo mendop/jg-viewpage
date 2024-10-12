@@ -1,4 +1,4 @@
-为什么包格式化呢
+为什么老格式化呢？？
 ===========================
 dependencyResolutionManagement {
 		repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -17,7 +17,7 @@ dependencyResolutionManagement {
   private List<IconBean> data = new ArrayList<>();
 
 ===========================
-  jgView.setActivity(this)
+	  jgView.setActivity(this)
                 .setBackPadding(0, 10, 0, 10)
                 .setItemCount(9)
                 .setSpanCount(3)
