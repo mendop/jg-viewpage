@@ -10,7 +10,7 @@
 #===========================
 
 #dependencies {
-#	       implementation 'com.github.mendop:jg-viewpage:1.0.2'
+#	       implementation 'com.github.mendop:jg-viewpage:1.0.3'
 #	}
 
 #===========================
